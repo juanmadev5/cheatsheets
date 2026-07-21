@@ -14,14 +14,25 @@ La idea es tener referencias simples, organizadas por categorías, para consulta
 │   └── git-cheatsheet.md
 │
 ├── frameworks/
-│   ├── android-jetpack-compose-cheatsheet.md
-│   ├── springboot-cheatsheet.md
-│   └── flutter-cheatsheet.md
+│   ├── android/
+│   │   ├── README.md
+│   │   └── <tema>/
+│   ├── aspnet-core/
+│   │   ├── README.md
+│   │   └── <tema>/
+│   ├── flutter/
+│   │   ├── README.md
+│   │   └── <tema>/
+│   └── springboot/
+│       ├── README.md
+│       └── <tema>/
 │
 ├── programming-languages/
-│   └── dart-cheatsheet.md
-│    
-└── README.md
+│   ├── dart-cheatsheet.md
+│   └── kotlin-cheatsheet.md
+│
+├── README.md
+└── SOURCES.md
 ````
 
 ---
@@ -41,10 +52,10 @@ Herramientas utilizadas en el día a día del desarrollo.
 
 Frameworks y tecnologías para desarrollo frontend, backend y mobile.
 
-* Android Jetpack Compose
+* Android
+* ASP.NET Core
 * Flutter
 * Spring Boot
-* React *(próximamente)*
 
 ---
 
@@ -53,9 +64,7 @@ Frameworks y tecnologías para desarrollo frontend, backend y mobile.
 Lenguajes de programación y ecosistemas relacionados.
 
 * Dart
-* Java / Spring Boot
 * Kotlin
-* TypeScript *(próximamente)*
 
 ---
 
@@ -104,8 +113,20 @@ Ejemplos:
 ```bash
 git-cheatsheet.md
 docker-cheatsheet.md
-flutter-cheatsheet.md
 ```
+
+Para frameworks (que suelen tener muchas subsecciones), se usa en cambio una carpeta por framework con subcarpetas por tema y un `README.md` con el índice:
+
+```bash
+frameworks/<framework>/README.md
+frameworks/<framework>/<tema>/<tema>.md
+```
+
+---
+
+## Fuentes
+
+[`SOURCES.md`](SOURCES.md) registra la documentación oficial consultada para verificar y actualizar cada cheatsheet (versiones, APIs vigentes, deprecaciones). Solo se citan fuentes oficiales — nada de blogs ni artículos de terceros.
 
 ---
 
