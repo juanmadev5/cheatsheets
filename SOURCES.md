@@ -1,6 +1,6 @@
 # Sources
 
-Registro de documentación oficial consultada para verificar y actualizar el contenido de `frameworks/`. Se agrega una sección por framework a medida que se investiga/actualiza su contenido — no implica que todo el cheatsheet haya sido verificado, solo lo que efectivamente se contrastó contra estas fuentes.
+Registro de documentación oficial consultada para verificar y actualizar el contenido de los cheatsheets. Se agrega una sección por framework a medida que se investiga/actualiza su contenido — no implica que todo el cheatsheet haya sido verificado, solo lo que efectivamente se contrastó contra estas fuentes.
 
 **Regla:** solo se listan fuentes oficiales — documentación del framework/librería, release notes o repositorio oficial del proyecto (developer.android.com, kotlinlang.org, el repo GitHub del propio proyecto, etc.). Nada de blogs, Medium ni artículos de terceros.
 
