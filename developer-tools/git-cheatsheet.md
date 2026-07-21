@@ -7,8 +7,10 @@
 - [Configuración inicial](#️-configuración-inicial)
 - [Repositorio — init, clone](#-repositorio)
 - [Stage & Commit — add, commit, amend](#-stage--commit)
+- [Firma de commits (SSH) — gpg.format ssh](#-firma-de-commits-ssh)
 - [Historial y diferencias — log, diff, blame, show](#-historial-y-diferencias)
 - [Ramas — branch, switch, delete, rename](#-ramas-branches)
+- [Worktrees — múltiples ramas en paralelo](#-worktrees)
 - [Merge & Rebase — merge, rebase interactivo, cherry-pick](#-merge--rebase)
 - [Tags — crear, subir, eliminar](#️-tags)
 - [Remotos — fetch, pull, push, force-with-lease](#-remotos)
@@ -17,6 +19,7 @@
 - [Búsqueda — grep, log -S, bisect](#-búsqueda)
 - [Utilidades — shortlog, reflog, archive, gc](#️-utilidades)
 - [.gitignore — patrones](#--gitignore--patrones)
+- [.gitattributes — normalizar line endings, binarios, linguist](#-gitattributes--normalizar-el-repo)
 - [Flujo de trabajo típico — feature branches](#-flujo-de-trabajo-típico)
 - [Buenas prácticas — Conventional Commits](#-buenas-prácticas)
 
@@ -66,6 +69,22 @@ git config --global alias.lg "log --oneline --graph --decorate --all"
 
 ---
 
+## 🔏 Firma de commits (SSH)
+
+Desde Git 2.34+ se puede firmar commits/tags con una clave SSH en vez de GPG — reutiliza la misma clave que ya usás para autenticarte.
+
+```bash
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true       # Firmar todos los commits automáticamente
+git config --global tag.gpgsign true          # Firmar todos los tags automáticamente
+
+git commit -S -m "mensaje"                    # Firmar un commit puntual (si gpgsign no es global)
+git log --show-signature -1                    # Verificar la firma de un commit
+```
+
+---
+
 ## 🔍 Historial y diferencias
 
 | Comando | Descripción |
@@ -101,6 +120,20 @@ git config --global alias.lg "log --oneline --graph --decorate --all"
 | `git branch --no-merged` | Ramas sin mergear |
 
 > `git checkout` sigue funcionando, pero `git switch` y `git restore` son los comandos modernos (Git 2.23+).
+
+---
+
+## 🌳 Worktrees
+
+Permite tener varias ramas checkouteadas al mismo tiempo, cada una en su propio directorio, compartiendo el mismo `.git`. Ideal para un hotfix urgente sin perder el estado de lo que estás trabajando (alternativa a `stash`) o para correr agentes/tests en paralelo sobre distintas ramas.
+
+| Comando | Descripción |
+|---|---|
+| `git worktree add ../hotfix main` | Crear worktree nuevo desde `main` en `../hotfix` |
+| `git worktree add -b fix/bug-123 ../fix-123` | Crear worktree + rama nueva |
+| `git worktree list` | Listar worktrees activos |
+| `git worktree remove ../hotfix` | Eliminar un worktree |
+| `git worktree prune` | Limpiar referencias a worktrees eliminados manualmente |
 
 ---
 
@@ -259,6 +292,26 @@ logs/**
 ```
 
 > Generar `.gitignore` para tu stack: [gitignore.io](https://www.toptal.com/developers/gitignore)
+
+---
+
+## 📐 `.gitattributes` — normalizar el repo
+
+```gitattributes
+# Normalizar line endings (LF) para todos los archivos de texto
+* text=auto eol=lf
+
+# Forzar CRLF solo en scripts de Windows
+*.bat text eol=crlf
+
+# Tratar como binario (sin diff ni normalización)
+*.png binary
+*.jpg binary
+
+# Excluir del linguist de GitHub (no cuenta como código del repo)
+vendor/* linguist-vendored
+docs/* linguist-documentation
+```
 
 ---
 
