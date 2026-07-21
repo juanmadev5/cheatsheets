@@ -31,9 +31,11 @@ La idea es tener referencias simples, organizadas por categorías, para consulta
 │   ├── dart-cheatsheet.md
 │   └── kotlin-cheatsheet.md
 │
+├── AGENTS.md
 ├── README.md
-└── SOURCES.md
-````
+├── SOURCES.md
+└── TEMPLATE_CHEATSHEET.md
+```
 
 ---
 
@@ -65,6 +67,15 @@ Lenguajes de programación y ecosistemas relacionados.
 
 * Dart
 * Kotlin
+
+---
+
+## Guía para Agentes de IA e Integración
+
+Para mantener la consistencia técnica, el formato visual y el control de calidad en este repositorio, la interacción con Agentes de IA sigue las pautas definidas en **[`AGENTS.md`](AGENTS.md)**:
+
+* **Normas y reglas de trabajo para IA:** Consulta [`AGENTS.md`](AGENTS.md) para ver las reglas de edición, flujos de trabajo y directrices de consulta (RAG).
+* **Plantilla oficial para Cheatsheets:** Puedes usar **[`TEMPLATE_CHEATSHEET.md`](TEMPLATE_CHEATSHEET.md)** como punto de partida para crear nuevos cheatsheets con la estructura estándar recomendada (tablas, código bilingüe y resúmenes).
 
 ---
 
