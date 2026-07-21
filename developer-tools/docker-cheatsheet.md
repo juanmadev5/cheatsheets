@@ -19,6 +19,7 @@
 - [Inspección — ps, logs, top, config, port](#inspección)
 - [Ejecución y build — exec, run, build, pull, push](#ejecución-y-build)
 - [Escalar y archivos — scale, -f, --profile, env-file](#escalar-y-archivos)
+- [Watch — auto-sync en desarrollo](#watch--auto-sync-en-desarrollo)
 - [Estructura de docker-compose.yml — servicios, volúmenes, redes, healthcheck](#-estructura-de-docker-composeyml)
 
 ### Dockerfile
@@ -39,6 +40,7 @@
 
 ### Seguridad y configuración
 - [Docker Secrets — crear, montar, leer en aplicación](#-docker-secrets)
+- [Docker Scout — análisis de vulnerabilidades (CVEs)](#-docker-scout--análisis-de-vulnerabilidades)
 - [Variables de entorno — -e, --env-file, interpolación en Compose](#️-variables-de-entorno)
 - [Network Security Config — bridge vs host, redes internas](#networking-en-docker-compose)
 
@@ -242,6 +244,33 @@
 
 ---
 
+### Watch — auto-sync en desarrollo
+
+`docker compose watch` sincroniza cambios de código al container corriendo (o rebuildea) sin reiniciar `docker compose up`, reemplazando bind mounts + nodemon/similar para hot reload.
+
+```bash
+docker compose watch              # Requiere una sección `develop.watch` por servicio
+docker compose up --watch         # Levantar servicios y activar watch en el mismo comando
+```
+
+```yaml
+services:
+  api:
+    build: .
+    develop:
+      watch:
+        - action: sync            # Copiar archivos al container sin rebuild
+          path: ./src
+          target: /app/src
+        - action: rebuild         # Reconstruir la imagen si cambian las dependencias
+          path: package.json
+        - action: sync+restart    # Copiar y reiniciar el proceso del container
+          path: ./config
+          target: /app/config
+```
+
+---
+
 ## 📄 Estructura de `docker-compose.yml`
 
 ```yaml
@@ -268,7 +297,7 @@ services:
       - dev                         # Solo se levanta con --profile dev
 
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     environment:
       POSTGRES_PASSWORD: secret
     volumes:
@@ -280,7 +309,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:7-alpine
+    image: redis:8-alpine   # Desde Redis 8, licencia tri-license (SSPL/RSAL/AGPLv3) — Valkey (BSD-3) es la alternativa 100% open source
     restart: always
 
 volumes:
@@ -298,7 +327,7 @@ networks:
 
 ```dockerfile
 # Multi-stage build: stage base
-FROM node:20-alpine AS base
+FROM node:24-alpine AS base
 WORKDIR /app
 
 # Copiar dependencias primero (mejor uso de caché)
@@ -360,7 +389,7 @@ CMD ["dist/main.js"]
 - **Multi-stage builds** para mantener la imagen final pequeña (sin herramientas de build).
 - **Nunca correr como root** en producción; usar `USER` con un usuario sin privilegios.
 - **Usar imágenes Alpine o Distroless** cuando sea posible para minimizar superficie de ataque.
-- **Pinear versiones** (`node:20.11-alpine3.19`) en producción para builds reproducibles.
+- **Pinear versiones** (`node:24.4-alpine3.21`) en producción para builds reproducibles.
 - **`depends_on` con `condition: service_healthy`** en lugar de scripts de espera externos.
 
 ---
@@ -427,7 +456,7 @@ services:
           - api-service
 
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     networks:
       - backend    # Solo accesible desde backend, no desde frontend
 
@@ -467,7 +496,7 @@ networks:
 ```bash
 # Named volumes
 docker volume create pgdata
-docker run -v pgdata:/var/lib/postgresql/data postgres:16-alpine
+docker run -v pgdata:/var/lib/postgresql/data postgres:18-alpine
 
 # Bind mount — solo ruta absoluta o ./relativa
 docker run -v /home/user/app:/app my-image
@@ -507,7 +536,7 @@ docker volume inspect pgdata
 ```yaml
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     volumes:
       # Named volume
       - pgdata:/var/lib/postgresql/data
@@ -573,7 +602,7 @@ docker secret inspect db_password   # Muestra metadata, NUNCA el valor
 # docker-compose.yml con secrets (Compose v3.1+)
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/db_password   # Leer desde archivo
     secrets:
@@ -613,6 +642,27 @@ db_password = get_secret("db_password")
 
 ---
 
+## 🔬 Docker Scout — análisis de vulnerabilidades
+
+Docker Scout viene integrado en la CLI (`docker scout`) y analiza imágenes en busca de CVEs conocidos, comparando contra la base de datos de vulnerabilidades y sugiriendo actualizaciones de la imagen base.
+
+```bash
+# Resumen rápido de una imagen (vulnerabilidades + recomendaciones de base image)
+docker scout quickview my-image:latest
+
+# Listado detallado de CVEs
+docker scout cves my-image:latest
+docker scout cves --only-severity critical,high my-image:latest
+
+# Comparar dos imágenes (ej: antes/después de un cambio)
+docker scout compare my-image:latest --to my-image:previous
+
+# Recomendaciones de imagen base más segura/liviana
+docker scout recommendations my-image:latest
+```
+
+---
+
 ## 🏗️ Multi-stage builds
 
 Los multi-stage builds permiten separar el entorno de compilación del de producción, resultando en imágenes finales mucho más pequeñas y seguras.
@@ -634,19 +684,19 @@ ENTRYPOINT ["/app"]
 
 
 # Ejemplo: Node.js — de ~1.2GB a ~200MB
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS production
+FROM node:24-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 # Solo copiar dependencias de producción y el build
@@ -659,7 +709,7 @@ CMD ["node", "dist/main.js"]
 
 
 # Ejemplo: Java Spring Boot — con layer cache
-FROM eclipse-temurin:21-jdk-alpine AS builder
+FROM eclipse-temurin:25-jdk-alpine AS builder
 WORKDIR /build
 COPY mvnw .
 COPY .mvn .mvn
@@ -669,22 +719,24 @@ COPY src ./src
 RUN ./mvnw package -DskipTests -q
 
 # Extraer layers para mejor cache en deploys sucesivos
-FROM eclipse-temurin:21-jdk-alpine AS extractor
+# El jarmode "layertools" fue reemplazado por "tools" (con subcomando extract)
+FROM eclipse-temurin:25-jdk-alpine AS extractor
 WORKDIR /build
 COPY --from=builder /build/target/*.jar app.jar
-RUN java -Djarmode=layertools -jar app.jar extract
+RUN java -Djarmode=tools -jar app.jar extract --layers --destination extracted
 
-FROM eclipse-temurin:21-jre-alpine AS production  # JRE es más pequeño que JDK
+FROM eclipse-temurin:25-jre-alpine AS production  # JRE es más pequeño que JDK
 WORKDIR /app
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring
 # Copiar layers en orden de menor a mayor frecuencia de cambio
-COPY --from=extractor /build/dependencies .
-COPY --from=extractor /build/spring-boot-loader .
-COPY --from=extractor /build/snapshot-dependencies .
-COPY --from=extractor /build/application .
+COPY --from=extractor /build/extracted/dependencies .
+COPY --from=extractor /build/extracted/spring-boot-loader .
+COPY --from=extractor /build/extracted/snapshot-dependencies .
+COPY --from=extractor /build/extracted/application .
 EXPOSE 8080
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+# El layer "application" extraído ya es un jar ejecutable — ya no hace falta invocar JarLauncher a mano
+ENTRYPOINT ["sh", "-c", "java -jar application.jar"]
 
 
 # Build selectivo de un stage específico (útil para CI)
@@ -693,7 +745,7 @@ docker build --target production -t myapp:latest .
 
 # Pasar ARG entre stages
 ARG VERSION=dev
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 ARG VERSION
 RUN echo "Building version: $VERSION"
 
@@ -933,7 +985,7 @@ services:
       - .env.${ENVIRONMENT:-development}     # Override por ambiente
 
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     environment:
       POSTGRES_DB: ${DB_NAME:-myapp}
       POSTGRES_USER: ${DB_USER:-admin}
@@ -971,7 +1023,7 @@ docker buildx build --platform linux/amd64 -t myapp:latest --load .
 # --load  → cargar en Docker local (solo una plataforma)
 
 # Inspeccionar qué plataformas soporta una imagen
-docker buildx imagetools inspect ubuntu:24.04
+docker buildx imagetools inspect ubuntu:26.04
 
 # Build con caché en registry (acelera CI/CD)
 docker buildx build \
@@ -983,7 +1035,7 @@ docker buildx build \
   .
 
 # Emulación QEMU — correr binarios ARM en x86 (para testing)
-docker run --rm --platform linux/arm64 ubuntu:24.04 uname -m   # aarch64
+docker run --rm --platform linux/arm64 ubuntu:26.04 uname -m   # aarch64
 ```
 
 ---
