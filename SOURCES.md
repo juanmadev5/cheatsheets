@@ -250,6 +250,21 @@ _Investigado: julio 2026 (actualización de versiones y remoción de contenido d
 
 ---
 
+## Dart
+
+_Investigado: julio 2026 (verificación de vigencia del cheatsheet — sin cambio de estructura de carpetas, se mantiene como archivo único en `programming-languages/`)._
+
+- https://dart.dev/get-dart — versión estable actual (Dart 3.12.1)
+- https://dart.dev/changelog — historial de releases 3.10 (12 nov. 2025), 3.11 (11 feb. 2026) y 3.12 (18 may. 2026)
+- https://dart.dev/language/branches — corrige un error del cheatsheet: Dart **no** tiene `if` como expresión (solo el operador ternario, if-case y switch expressions); también confirma que los `case` no vacíos de un switch *statement* ya no requieren `break` explícito desde Dart 3 (saltan al final del switch automáticamente)
+- https://dart.dev/language/dot-shorthands — sintaxis de dot shorthands (`.valor` en vez de `Tipo.valor`), requiere Dart 3.10+
+- https://dart.dev/language/constructors — named parameters privados como initializing formals (`required this._campo`), requiere Dart 3.12+
+- https://dart.dev/language/built-in-types — separador de dígitos con `_` en literales numéricos, introducido en Dart 3.6
+- https://dart.dev/tools/dart-compile — confirma que `dart compile wasm` sigue en desarrollo/experimental (no se agregó al cheatsheet por esa razón)
+- https://dart.dev/language/extension-types y https://dart.dev/blog/new-in-dart-3-3-extension-types-javascript-interop-and-more — extension types (Dart 3.3+, feb. 2024): sintaxis, `implements` para variantes transparentes, borrado en tiempo de compilación; tema agregado al cheatsheet tras detectar que faltaba
+
+---
+
 ## Developer Tools (Git / Docker)
 
 _Investigado: julio 2026. A diferencia de `frameworks/`, estos cheatsheets se mantienen como archivo único — no se dividen en carpetas por tema._
