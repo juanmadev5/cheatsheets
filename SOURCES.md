@@ -265,6 +265,32 @@ _Investigado: julio 2026 (verificación de vigencia del cheatsheet — sin cambi
 
 ---
 
+## Kotlin
+
+_Investigado: julio 2026 (verificación de vigencia del cheatsheet — sin cambio de estructura de carpetas, se mantiene como archivo único en `programming-languages/`)._
+
+### Lenguaje
+- https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/capitalize.html — corrige un bug real del cheatsheet: `String.capitalize()`/`decapitalize()` fueron deprecados en Kotlin 1.5 y son **error de compilación** desde Kotlin 2.1; el reemplazo oficial es `replaceFirstChar { ... }`
+- https://kotlinlang.org/docs/whatsnew21.html — guard conditions en `when` introducidas en preview (con opt-in) en Kotlin 2.1.0
+- https://kotlinlang.org/docs/whatsnew22.html — guard conditions promovidas a estable en Kotlin 2.2.0 (el cheatsheet decía "Kotlin 2.0+", corregido a "Kotlin 2.2+")
+- https://kotlinlang.org/docs/releases.html — proceso de release de Kotlin
+
+### Versión de Kotlin y toolchain
+- Kotlin 2.3.20 como versión estable actual (ya verificado en la sección Android Jetpack Compose de este mismo documento)
+- https://plugins.gradle.org/plugin/com.google.devtools.ksp y búsqueda en Maven Central — KSP pasó a versionado propio (`2.3.10`), ya no usa el prefijo `<kotlin-version>-<ksp-revision>`; compatible con Kotlin 2.2+
+
+### Librerías (versiones en `build.gradle.kts`)
+- https://github.com/Kotlin/kotlinx.coroutines/releases — 1.11.0, basado en Kotlin 2.2.20
+- https://github.com/Kotlin/kotlinx.serialization/releases — 1.11.0, basado en Kotlin 2.3.20
+- https://ktor.io/docs/releases.html y https://ktor.io/docs/whats-new-350.html — Ktor 3.5.0 (15 may. 2026)
+- https://arrow-kt.io/community/blog/2026/06/04/arrow-2-2-3/ — Arrow 2.2.3 (4 jun. 2026); confirma que Arrow 2.x requiere Kotlin 2.2.0 como mínimo (el cheatsheet fijaba Arrow 1.2.4, una major desactualizada)
+- https://mvnrepository.com/artifact/io.mockk/mockk — MockK 1.14.7
+- https://kotest.io/docs/changelog.html y https://github.com/kotest/kotest/releases — Kotest 6.2.3; confirma breaking changes de la serie 6.0 (remoción de `@AutoScan`, requiere JDK 11+ y Kotlin 2.2+) respecto a la 5.9.1 que tenía el cheatsheet
+- https://mvnrepository.com/artifact/io.github.oshai/kotlin-logging-jvm — kotlin-logging-jvm 8.0.4
+- https://github.com/qos-ch/logback/releases — logback-classic 1.5.38
+
+---
+
 ## Developer Tools (Git / Docker)
 
 _Investigado: julio 2026. A diferencia de `frameworks/`, estos cheatsheets se mantienen como archivo único — no se dividen en carpetas por tema._
