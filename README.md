@@ -28,8 +28,12 @@ La idea es tener referencias simples, organizadas por categorías, para consulta
 │       └── <tema>/
 │
 ├── programming-languages/
-│   ├── dart-cheatsheet.md
-│   └── kotlin-cheatsheet.md
+│   ├── dart/
+│   │   ├── README.md
+│   │   └── <tema>/
+│   └── kotlin/
+│       ├── README.md
+│       └── <tema>/
 │
 ├── AGENTS.md
 ├── README.md
@@ -126,11 +130,14 @@ git-cheatsheet.md
 docker-cheatsheet.md
 ```
 
-Para frameworks (que suelen tener muchas subsecciones), se usa en cambio una carpeta por framework con subcarpetas por tema y un `README.md` con el índice:
+Para tecnologías con muchas subsecciones (frameworks y lenguajes de programación), se usa en cambio una carpeta por tecnología con subcarpetas por tema y un `README.md` con el índice:
 
 ```bash
 frameworks/<framework>/README.md
 frameworks/<framework>/<tema>/<tema>.md
+
+programming-languages/<lenguaje>/README.md
+programming-languages/<lenguaje>/<tema>/<tema>.md
 ```
 
 ---

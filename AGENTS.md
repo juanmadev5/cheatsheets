@@ -59,20 +59,23 @@ docker ps --format "table {{.ID}}\t{{.Names}}"
 
 ## 📁 Estructura del Repositorio y Subcarpetas
 
-Las tecnologías dentro de `frameworks/` **siempre** deben dividirse en subcarpetas siguiendo el patrón estricto:
+Las tecnologías dentro de `frameworks/` y `programming-languages/` **siempre** deben dividirse en subcarpetas siguiendo el patrón estricto:
 
 ```
 frameworks/<framework>/<tema>/<tema>.md
+programming-languages/<lenguaje>/<tema>/<tema>.md
 ```
 
-*Ejemplo:* `frameworks/android/almacenamiento/almacenamiento.md`
+*Ejemplos:* `frameworks/android/almacenamiento/almacenamiento.md`, `programming-languages/kotlin/coroutines/coroutines.md`
+
+Solo `developer-tools/` se mantiene como archivo único por tecnología (`<technology>-cheatsheet.md`), ya que sus cheatsheets no alcanzan el volumen de contenido de un framework o lenguaje completo.
 
 ---
 
 ## 📌 Flujo para Actualizar los Índices (`README.md`)
 
-1. **`README.md` del Framework (`frameworks/<framework>/README.md`):**
-   * Al agregar un nuevo tema o cheatsheet dentro de un framework, actualiza inmediatamente el índice local agregando el enlace correspondiente:
+1. **`README.md` del Framework o Lenguaje** (`frameworks/<framework>/README.md` o `programming-languages/<lenguaje>/README.md`):
+   * Al agregar un nuevo tema o cheatsheet, actualiza inmediatamente el índice local agregando el enlace correspondiente:
      ```markdown
      * [Almacenamiento](almacenamiento/almacenamiento.md) — Breve explicación de 1 línea.
      ```
