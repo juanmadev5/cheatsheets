@@ -291,6 +291,29 @@ _Investigado: julio 2026 (verificación de vigencia del cheatsheet — sin cambi
 
 ---
 
+## C#
+
+_Investigado: julio 2026 (cheatsheet nuevo, primera versión — dividido en carpetas por tema en `programming-languages/csharp/`)._
+
+### Versión de .NET / C#
+- https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview — .NET 10 es la versión LTS actual (soporte de 3 años), lanzada junto con C# 14
+- https://www.theregister.com/2025/11/12/net_10_c_14_visual/ — confirma el lanzamiento de .NET 10 LTS y Visual Studio 2026 en noviembre 2025
+- https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/configure-language-version — C# 14 requiere .NET 10 como mínimo
+
+### C# 14 (novedades usadas en csharp-moderno.md)
+- https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14 — extension members, `field` keyword, null-conditional assignment, implicit span conversions, partial events/constructors, modificadores en lambdas sin tipo explícito
+- https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview — resumen de C# 14 dentro del overview de .NET 10
+
+### C# 12 / 13 (features previas, siguen vigentes)
+- https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12 — primary constructors (cualquier class/struct), collection expressions con spread `..`, inline arrays
+- https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13 — `params` collections (incluye `ReadOnlySpan<T>`), nuevo tipo `System.Threading.Lock`, partial properties/indexers, `\e` escape sequence
+
+### Testing (xUnit v3) — reutilizado del research de ASP.NET Core en este mismo documento
+- https://xunit.net/docs/getting-started/v3/migration — `IAsyncLifetime` usa `ValueTask`, requiere `<OutputType>Exe</OutputType>`
+- https://www.nuget.org/packages/FluentAssertions — confirma que v8+ requiere licencia comercial (Xceed); se fija la última 7.x libre (Apache 2.0)
+
+---
+
 ## Developer Tools (Git / Docker)
 
 _Investigado: julio 2026. A diferencia de `frameworks/`, estos cheatsheets se mantienen como archivo único — no se dividen en carpetas por tema._

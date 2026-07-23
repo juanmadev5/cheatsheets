@@ -28,6 +28,9 @@ La idea es tener referencias simples, organizadas por categorías, para consulta
 │       └── <tema>/
 │
 ├── programming-languages/
+│   ├── csharp/
+│   │   ├── README.md
+│   │   └── <tema>/
 │   ├── dart/
 │   │   ├── README.md
 │   │   └── <tema>/
@@ -69,6 +72,7 @@ Frameworks y tecnologías para desarrollo frontend, backend y mobile.
 
 Lenguajes de programación y ecosistemas relacionados.
 
+* C#
 * Dart
 * Kotlin
 
